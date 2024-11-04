@@ -1,0 +1,14 @@
+kcc_data:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      user: postgres
+      password: password
+      port: 5434
+      dbname: prod
+      schema: my_app
+      threads: 1
+      keepalives_idle: 0
+      connect_timeout: 10

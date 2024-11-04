@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+dbt-postgres = "*"
+dbt-core = "*"
+sqlfluff = "*"
+
+
+[dev-packages]
+pytest = "*"
+flake8 = "*"
+black = "*"
+autoflake = "*"
+isort = "*"
+
+[requires]
+python_version = "3.10"
+
+[scripts]
+format = "bash -c \"autoflake --remove-all-unused-imports -i -r scripts/ && isort scripts/ && black scripts/\""
+format-check = "bash -c \"autoflake --remove-all-unused-imports -c -r scripts/ && isort -c scripts/ && black --check --diff scripts/\""
+tf-format = "bash -c \"terraform fmt -recursive terraform\""
+tf-check = "bash -c \"cd terraform && terraform init -backend=false && terraform validate\""

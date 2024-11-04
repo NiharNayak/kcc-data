@@ -1,0 +1,24 @@
+store_id,store_name,region,manager_id,manager_name
+SI01,CityGrocer,Midwest,MAN01,Sophia Lopez
+SI02,FreshMart,Northeast,MAN02,Linda White
+SI03,ShopEasy,Midwest,MAN03,Elijah Moore
+SI04,CornerStore,West,MAN04,Liam Wilson
+SI05,MarketPlace,West,MAN05,Lucas Martin
+SI06,MetroGrocery,South,MAN06,Isabella Clark
+SI07,ValueMart,Northeast,MAN07,Alice Johnson
+SI08,PrimeGrocer,Midwest,MAN08,David Thompson
+SI09,SuperSave,South,MAN09,Emma Martinez
+SI10,DiscountDepot,Midwest,MAN10,John Smith
+SI11,FoodBazaar,Midwest,MAN11,Jane Doe
+SI12,BudgetBuy,Northeast,MAN12,Alexander Perez
+SIO1,CityGrocer_,Midwest,MAN01,Sophia Lopez
+SI13,UrbanMarket,Northeast,MAN13,William Green
+,GreenValley,West,MAN14,Olivia Davis
+SI15,QuickShop,Northeast,MAN15,Mia King
+SI16,FreshChoice,Northeast,MAN16,James Anderson
+SI17,DailyMart,Midwest,MAN17,Michael Brown
+,MegaMart,Northeast,MAN18,Benjamin Garcia
+SI19,GroceryHub,South,MAN19,Amelia Lee
+SI20,FamilyMart,West,MAN20,Ethan Scott
+SI21,ValueMart2,Northeast,MAN07,Alice Johnson
+SI22,ValueMart3,Northeast,MAN07,Alice Johnson
