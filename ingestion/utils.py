@@ -1,5 +1,5 @@
-PROJECT_ID = ""
-DATASET_ID = ""
+PROJECT_ID = "kcc_project"
+DATASET_ID = "example_dataset"
 
 TABLE_MAPPING_PREFIX = f"{PROJECT_ID}.{DATASET_ID}"
 

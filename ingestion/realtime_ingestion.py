@@ -38,8 +38,8 @@ def ingest_gdrive_data(dataset_name, dataset_uri):
     # Dataflow options
     pipeline_options = PipelineOptions(
         runner="DataflowRunner",
-        project="your_project",
-        region="your_region",
+        project="kcc_project",
+        region="ap_northeast",
         temp_location="gs://your_bucket/temp"
     )
 
