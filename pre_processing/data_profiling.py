@@ -28,6 +28,7 @@ class SalesDataLoader:
 class SalesDataProfiler:
     def __init__(self, df):
         """Initialize with a sales dataframe"""
+        self.original_df = df.clone() 
         self.df = df.clone()
         self.prepare_data()
 
@@ -43,37 +44,44 @@ class SalesDataProfiler:
         """Identify records with invalid data formats or incorrect values"""
         invalid_records = {}
 
-        # Check for invalid dates
-        invalid_dates = self.df.filter(pl.col("Transaction Date").is_null())
-        if invalid_dates.height > 0:
-            invalid_records['Invalid Dates'] = invalid_dates.to_dicts()
+        # Check for invalid dates in the modified DataFrame and fetch from the original DataFrame
+        invalid_dates_mask = self.df.filter(pl.col("Transaction Date").is_null()).select("Transaction ID")
+        if invalid_dates_mask.height > 0:
+            invalid_records['Invalid Dates'] = self.original_df.filter(pl.col("Transaction ID").is_in(invalid_dates_mask)).to_dicts()
 
-        # Check for future dates
+        # Check for future dates in the original DataFrame
         current_date = datetime.now().date()
         future_dates = self.df.filter(pl.col("Transaction Date") > current_date)
         if future_dates.height > 0:
             invalid_records['Future Dates'] = future_dates.to_dicts()
 
-        # Check for negative or zero quantities and prices
+        # Check for negative or zero quantities and prices in the original DataFrame
         invalid_amounts = self.df.filter(
             (pl.col("Quantity Sold") <= 0) | (pl.col("Price per Unit") <= 0)
         )
         if invalid_amounts.height > 0:
             invalid_records['Invalid Amounts'] = invalid_amounts.to_dicts()
 
-        # Check for empty strings or NaN in 'Quantity Sold'
+        # Check for empty strings or NaN in 'Quantity Sold' in the original DataFrame
         invalid_quantity = self.df.filter(
             (pl.col("Quantity Sold").is_null())
         )
         if invalid_quantity.height > 0:
             invalid_records['Invalid Quantity Sold'] = invalid_quantity.to_dicts()
 
-        # Check for empty strings or NaN in 'Price per Unit'
+        # Check for empty strings or NaN in 'Price per Unit' in the original DataFrame
         invalid_price = self.df.filter(
             (pl.col("Price per Unit").is_null())
         )
         if invalid_price.height > 0:
             invalid_records['Invalid Price per Unit'] = invalid_price.to_dicts()
+
+        # Check for duplicate records in the original DataFrame
+        duplicate_records = self.df.filter(pl.col("Transaction ID").is_in(
+            self.original_df.group_by("Transaction ID").agg(pl.count().alias("count")).filter(pl.col("count") > 1).
+            select("Transaction ID")))
+        if duplicate_records.height > 0:
+            invalid_records['Duplicate Records'] = duplicate_records.to_dicts()
 
         return invalid_records
 
@@ -88,7 +96,7 @@ class SalesDataProfiler:
         features_np = numerical_features.to_numpy()
 
         # Isolation Forest Anomaly Detection
-        iso_forest = IsolationForest(contamination=0.05, random_state=42)
+        iso_forest = IsolationForest(contamination=0.01, random_state=42)
 
         # Fit and predict anomaly scores
         anomaly_scores = iso_forest.fit_predict(features_np)
@@ -239,7 +247,7 @@ def main():
     print("\n3. Invalid Records:")
     if report['invalid_records']:
         for issue_type, records in report['invalid_records'].items():
-            print(f"\n  {issue_type}:")
+            print(f"\n  {issue_type} ({len(records)}):")
             for record in records:
                 print(f"    {record}")
     else:
